@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CustomerProductModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Asset Location">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="100" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" />
+          <Property Name="Address" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="AssetLocations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LocationId" Type="int" />
+          <Property Name="AssetId" Type="int" />
+          <Property Name="Modell" Type="int" />
+          <Property Name="LastSeen" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Assets">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="100" />
+          <Property Name="Type" Type="nvarchar" MaxLength="200" />
+          <Property Name="Modell" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <Association Name="FK_AssetLocations_Assets">
+          <End Role="Assets" Type="Self.Assets" Multiplicity="0..1" />
+          <End Role="AssetLocations" Type="Self.AssetLocations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assets">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AssetLocations">
+              <PropertyRef Name="AssetId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AssetLocations_Location">
+          <End Role="Asset Location" Type="Self.Asset Location" Multiplicity="0..1" />
+          <End Role="AssetLocations" Type="Self.AssetLocations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Asset Location">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AssetLocations">
+              <PropertyRef Name="LocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CustomerProductModelStoreContainer">
+          <EntitySet Name="Asset Location" EntityType="Self.Asset Location" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AssetLocations" EntityType="Self.AssetLocations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Assets" EntityType="Self.Assets" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AssetLocations_Assets" Association="Self.FK_AssetLocations_Assets">
+            <End Role="Assets" EntitySet="Assets" />
+            <End Role="AssetLocations" EntitySet="AssetLocations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AssetLocations_Location" Association="Self.FK_AssetLocations_Location">
+            <End Role="Asset Location" EntitySet="Asset Location" />
+            <End Role="AssetLocations" EntitySet="AssetLocations" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CustomerProductModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Asset_Location">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AssetLocations" Relationship="Self.FK_AssetLocations_Location" FromRole="Asset_Location" ToRole="AssetLocations" />
+        </EntityType>
+        <EntityType Name="AssetLocations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LocationId" Type="Int32" />
+          <Property Name="AssetId" Type="Int32" />
+          <Property Name="Modell" Type="Int32" />
+          <Property Name="LastSeen" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Asset_Location" Relationship="Self.FK_AssetLocations_Location" FromRole="AssetLocations" ToRole="Asset_Location" />
+          <NavigationProperty Name="Assets" Relationship="Self.FK_AssetLocations_Assets" FromRole="AssetLocations" ToRole="Assets" />
+        </EntityType>
+        <EntityType Name="Assets">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Modell" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AssetLocations" Relationship="Self.FK_AssetLocations_Assets" FromRole="Assets" ToRole="AssetLocations" />
+        </EntityType>
+        <Association Name="FK_AssetLocations_Location">
+          <End Role="Asset_Location" Type="Self.Asset_Location" Multiplicity="0..1" />
+          <End Role="AssetLocations" Type="Self.AssetLocations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Asset_Location">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AssetLocations">
+              <PropertyRef Name="LocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AssetLocations_Assets">
+          <End Role="Assets" Type="Self.Assets" Multiplicity="0..1" />
+          <End Role="AssetLocations" Type="Self.AssetLocations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assets">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AssetLocations">
+              <PropertyRef Name="AssetId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AssetsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Asset_Location" EntityType="Self.Asset_Location" />
+          <EntitySet Name="AssetLocations" EntityType="Self.AssetLocations" />
+          <EntitySet Name="Assets" EntityType="Self.Assets" />
+          <AssociationSet Name="FK_AssetLocations_Location" Association="Self.FK_AssetLocations_Location">
+            <End Role="Asset_Location" EntitySet="Asset_Location" />
+            <End Role="AssetLocations" EntitySet="AssetLocations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AssetLocations_Assets" Association="Self.FK_AssetLocations_Assets">
+            <End Role="Assets" EntitySet="Assets" />
+            <End Role="AssetLocations" EntitySet="AssetLocations" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CustomerProductModelStoreContainer" CdmEntityContainer="AssetsEntities">
+          <EntitySetMapping Name="Asset_Location">
+            <EntityTypeMapping TypeName="CustomerProductModel.Asset_Location">
+              <MappingFragment StoreEntitySet="Asset Location">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AssetLocations">
+            <EntityTypeMapping TypeName="CustomerProductModel.AssetLocations">
+              <MappingFragment StoreEntitySet="AssetLocations">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+                <ScalarProperty Name="AssetId" ColumnName="AssetId" />
+                <ScalarProperty Name="Modell" ColumnName="Modell" />
+                <ScalarProperty Name="LastSeen" ColumnName="LastSeen" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Assets">
+            <EntityTypeMapping TypeName="CustomerProductModel.Assets">
+              <MappingFragment StoreEntitySet="Assets">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Modell" ColumnName="Modell" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
